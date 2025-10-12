@@ -2,6 +2,8 @@ import 'package:book_reader/models/book.dart';
 import 'package:book_reader/network/network.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/book_details_arguments.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -61,45 +63,51 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.orange.shade300,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(18.0),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(fit: BoxFit.fill,
-                              image: NetworkImage(
-                                book.imageLinks["thumbnail"] ?? '',
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/details',
+                        arguments: BookDetailsArguments(itemBook: book));
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(18.0),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(fit: BoxFit.fill,
+                                image: NetworkImage(
+                                  book.imageLinks["thumbnail"] ?? '',
+                                ),
                               ),
                             ),
+                            height: 200,
+                            width: 150,
+                            // child: Padding(
+                            //   padding: const EdgeInsets.all(18.0),
+                            //   child: Image.network(
+                            //     book.imageLinks["thumbnail"] ?? '',
+                            //   ),
+                            // ),
                           ),
-                          height: 200,
-                          width: 150,
-                          // child: Padding(
-                          //   padding: const EdgeInsets.all(18.0),
-                          //   child: Image.network(
-                          //     book.imageLinks["thumbnail"] ?? '',
-                          //   ),
-                          // ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            book.title,
-                            style: Theme.of(context).textTheme.titleSmall,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              book.title,
+                              style: Theme.of(context).textTheme.titleSmall,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            book.authors.join(', &'),
-                            style: Theme.of(context).textTheme.bodySmall,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              book.authors.join(', &'),
+                              style: Theme.of(context).textTheme.bodySmall,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -125,3 +133,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

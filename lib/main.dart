@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:book_reader/network/network.dart';
+import 'package:book_reader/pages/books_deatils.dart';
 import 'package:flutter/material.dart';
 
 import 'models/book.dart';
@@ -24,6 +25,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
       ),
+      initialRoute: '/',
+      routes: {
+        '/home' : (context) => HomeScreen(),
+        '/saved' : (context) => SavedScreen(),
+        '/favorite' : (context) => FavoriteScreen(),
+        '/details' : (context) => BooksDetailsScreen(),
+      },
       home: const MyHomePage(),
     );
   }
