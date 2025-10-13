@@ -38,9 +38,11 @@ class GridViewWidget extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.all(18.0),
                     decoration: BoxDecoration(
-                      image: DecorationImage(fit: BoxFit.fill,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
                         image: NetworkImage(
                           book.imageLinks["thumbnail"] ?? '',
+                          //scale: 1.0,
                         ),
                       ),
                     ),
