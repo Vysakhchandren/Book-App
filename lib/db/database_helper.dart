@@ -1,10 +1,9 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../models/book.dart';
 
 class DatabaseHelper {
-  static const _databaseName = 'books_database.db';
+  static const _databaseName = 'book_database.db';
   static const _databaseVersion = 1;
   static const _tableName = 'books';
 
@@ -20,6 +19,7 @@ class DatabaseHelper {
   }
 
   _initDatabase() async {
+    //device/data/datasename.db
     String path = join(await getDatabasesPath(), _databaseName);
     return await openDatabase(
       path,
@@ -30,20 +30,22 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-    CREATE TABLE $_tableName(
-      id TEXT PRIMARY KEY ,
-      title TEXT NOT NULL,
-      author TEXT NOT NULL,
-      publisher TEXT,
-      publishedDate TEXT,
-      industryIdentifiers TEXT,
-      pageCount INTEGER,
-      language TEXT,
-      imageLinks TEXT,
-      previewLinks TEXT,
-      infoLink TEXT
+      CREATE TABLE $_tableName (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        authors TEXT NOT NULL,
+        favorite INTEGER DEFAULT 0,
+        publisher TEXT,
+        publishedDate TEXT,
+        description TEXT,
+        industryIdentifiers TEXT,
+        pageCount INTEGER,
+        language TEXT,
+        imageLinks TEXT,
+        previewLink TEXT,
+        infoLink TEXT
       )
-      ''');
+    ''');
   }
 
   Future<int> insert(Book book) async {

@@ -1,3 +1,4 @@
+import 'package:book_reader/db/database_helper.dart';
 import 'package:book_reader/utils/book_details_arguments.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,7 @@ class _BooksDetailsScreenState extends State<BooksDetailsScreen> {
                   Text(book.title, style: theme.headlineSmall),
                   Text(book.authors.join(', '), style: theme.labelLarge),
                   Text(
-                    'Publised: ${book.publishedDate}',
+                    'Published: ${book.publishedDate}',
                     style: theme.bodySmall,
                   ),
                   Text('Page count: ${book.pageCount}', style: theme.bodySmall),
@@ -45,9 +46,35 @@ class _BooksDetailsScreenState extends State<BooksDetailsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ElevatedButton(onPressed: () {}, child: Text('Save')),
+                      ElevatedButton(
+                        onPressed: () async {
+                          //save a book to database
+                          try {
+                            print(book.authors);
+                           int savedInt = await DatabaseHelper.instance.insert(book);
+                           SnackBar snackBar = SnackBar(
+                              content: Text("Book saved successfully $savedInt"));
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          } catch (e) {
+                            print("Error --->$e");
+                          }
+                        },
+                        child: Text('Save'),
+                      ),
                       ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () async {
+                          try {
+                            await DatabaseHelper.instance.readAllBooks()
+                                .then((books) => {
+                                  for (var book in books)
+                                    {
+                                      print("Title: ${book.title}")
+                                    }
+                                });
+                          }catch (e) {
+                            print("Error --->$e");
+                          }
+                        },
                         icon: Icon(Icons.favorite),
                         label: Text('Favorite'),
                       ),
