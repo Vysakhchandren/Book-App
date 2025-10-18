@@ -14,15 +14,54 @@ class _SavedScreenState extends State<SavedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Saved')),
+      //appBar: AppBar(title: const Text('Saved')),
       body: FutureBuilder(
         future: DatabaseHelper.instance.readAllBooks(),
         builder: (context, snapshot) => snapshot.hasData
-            ? ListView.builder(itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              Book book = snapshot.data![index];
-              return ListTile(title: Text(book.title),);
-        })
+            ? ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  Book book = snapshot.data![index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(book.title),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          print("Delete ${book.id}");
+                          DatabaseHelper.instance.deleteBook(book.id);
+                          setState(() {
+                           // snapshot.data!.removeAt(index);
+                          });
+                        },
+                      ),
+                      leading: Image.network(
+                        book.imageLinks['thumbnail'] ?? '',
+                        fit: BoxFit.cover,
+                      ),
+                      subtitle: Column(
+                        children: [
+                          Text(book.authors.join(', ')),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              await DatabaseHelper.instance
+                                  .toggleFavoriteStatus(
+                                    book.id,
+                                    book.isFavorite,
+                                  )
+                                  .then(
+                                    (value) => print("Item Favored!!! $value"),
+                                  );
+                            },
+                            icon: const Icon(Icons.favorite),
+                            label: const Text('Add to Favorites'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              )
             : const Center(child: const CircularProgressIndicator()),
       ),
     );
