@@ -45,44 +45,60 @@ class _BooksDetailsScreenState extends State<BooksDetailsScreen> {
                   Text('Language :${book.language}', style: theme.bodySmall),
                   const SizedBox(height: 10,),
 
-                  Row(
-                    mainAxisAlignment: !isFromSavedScreen ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
-                    children: [
-                      !isFromSavedScreen ?
+                  SizedBox(
+                    child: !isFromSavedScreen ? ElevatedButton(onPressed: () async {
+                              //save a book to database
+                              try {
+                               int savedInt = await DatabaseHelper.instance.insert(book);
+                               SnackBar snackBar = SnackBar(
+                                  content: Text("Book saved successfully $savedInt"));
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              } catch (e) {
+                                print("Error --->$e");
+                              }
+                            }, child: const Text('Save')): ElevatedButton.icon(onPressed: () async{
 
-                      ElevatedButton(
-                        onPressed: () async {
-                          //save a book to database
-                          try {
-                           int savedInt = await DatabaseHelper.instance.insert(book);
-                           SnackBar snackBar = SnackBar(
-                              content: Text("Book saved successfully $savedInt"));
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          } catch (e) {
-                            print("Error --->$e");
-                          }
-                        },
-                        child: Text('Save'),
-                      ): const SizedBox(height: 10,),
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          await DatabaseHelper.instance
-                              .toggleFavoriteStatus(
-                            book.id,
-                            !book.isFavorite,
-                          )
-                              .then(
-                                (value) => print("Item Favored!!! $value"),
-                          );
-                          setState(() {
+                            }, icon: const Icon(Icons.favorite), label: const Text('Favorite'))),
 
-                          });
-                        },
-                        icon: Icon(Icons.favorite),
-                        label: Text('Favorite'),
-                      ),
-                    ],
-                  ),
+
+                  // Row(
+                  //   mainAxisAlignment: !isFromSavedScreen ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
+                  //   children: [
+                  //     !isFromSavedScreen ?
+                  //
+                  //     ElevatedButton(
+                  //       onPressed: () async {
+                  //         //save a book to database
+                  //         try {
+                  //          int savedInt = await DatabaseHelper.instance.insert(book);
+                  //          SnackBar snackBar = SnackBar(
+                  //             content: Text("Book saved successfully $savedInt"));
+                  //             ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  //         } catch (e) {
+                  //           print("Error --->$e");
+                  //         }
+                  //       },
+                  //       child: Text('Save'),
+                  //     ): const SizedBox(height: 10,),
+                  //     ElevatedButton.icon(
+                  //       onPressed: () async {
+                  //         await DatabaseHelper.instance
+                  //             .toggleFavoriteStatus(
+                  //           book.id,
+                  //           !book.isFavorite,
+                  //         )
+                  //             .then(
+                  //               (value) => print("Item Favored!!! $value"),
+                  //         );
+                  //         setState(() {
+                  //
+                  //         });
+                  //       },
+                  //       icon: Icon(Icons.favorite),
+                  //       label: Text('Favorite'),
+                  //     ),
+                  //   ],
+                  // ),
                   SizedBox(height: 10),
                   Text('Description', style: theme.titleMedium),
                   SizedBox(height: 5),
