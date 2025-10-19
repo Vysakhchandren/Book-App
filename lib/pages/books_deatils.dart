@@ -17,6 +17,7 @@ class _BooksDetailsScreenState extends State<BooksDetailsScreen> {
     final args =
         ModalRoute.of(context)?.settings.arguments as BookDetailsArguments;
     final Book book = args.itemBook;
+    final bool isFromSavedScreen = args.isFromSavedScreen;
     final theme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(title: Text(book.title)),
@@ -42,15 +43,17 @@ class _BooksDetailsScreenState extends State<BooksDetailsScreen> {
                   ),
                   Text('Page count: ${book.pageCount}', style: theme.bodySmall),
                   Text('Language :${book.language}', style: theme.bodySmall),
+                  const SizedBox(height: 10,),
 
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: !isFromSavedScreen ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
                     children: [
+                      !isFromSavedScreen ?
+
                       ElevatedButton(
                         onPressed: () async {
                           //save a book to database
                           try {
-                            print(book.authors);
                            int savedInt = await DatabaseHelper.instance.insert(book);
                            SnackBar snackBar = SnackBar(
                               content: Text("Book saved successfully $savedInt"));
@@ -60,9 +63,20 @@ class _BooksDetailsScreenState extends State<BooksDetailsScreen> {
                           }
                         },
                         child: Text('Save'),
-                      ),
+                      ): const SizedBox(height: 10,),
                       ElevatedButton.icon(
                         onPressed: () async {
+                          await DatabaseHelper.instance
+                              .toggleFavoriteStatus(
+                            book.id,
+                            !book.isFavorite,
+                          )
+                              .then(
+                                (value) => print("Item Favored!!! $value"),
+                          );
+                          setState(() {
+
+                          });
                         },
                         icon: Icon(Icons.favorite),
                         label: Text('Favorite'),

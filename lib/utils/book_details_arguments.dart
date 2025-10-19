@@ -2,5 +2,7 @@ import '../models/book.dart';
 
 class BookDetailsArguments {
   final Book itemBook;
-  BookDetailsArguments({required this.itemBook});
+  final bool isFromSavedScreen;
+
+  BookDetailsArguments({required this.itemBook, required this.isFromSavedScreen});
 }
