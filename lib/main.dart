@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home' : (context) => HomeScreen(),
         '/saved' : (context) => SavedScreen(),
-        '/favorite' : (context) => FavoriteScreen(),
+        '/favorite' : (context) => FavoritesScreen(),
         '/details' : (context) => BooksDetailsScreen(),
       },
       home: const MyHomePage(),
@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SavedScreen(),
-    const FavoriteScreen(),
+    const FavoritesScreen(),
   ];
 
   @override
